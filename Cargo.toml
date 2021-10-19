@@ -1,0 +1,37 @@
+[workspace]
+
+members = [
+    "simulation_toolbox",
+    "scene_runner",
+    "fenris",
+    "hamilton",
+    "lp-bfp",
+    "nested-vec",
+    "paradis",
+    "intel-mkl-src-patched",
+    "hamilton2",
+    "global_stash",
+    "fcm_convergence",
+]
+
+[profile.release]
+# Enable debug information if it becomes necessary to debug a release build. Otherwise, disable it,
+# as it contributes significantly to compile times.
+#debug = true
+incremental = true
+
+[profile.bench]
+debug=true
+
+# Patch intel-mkl-src to use our own version, which uses `mkl-sys` under the hood.
+# This lets us use both mkl-corrode and MKL LAPACK bindings through nalgebra in the same code base
+[patch.crates-io]
+intel-mkl-src = { path = "intel-mkl-src-patched" }
+
+# Override mkl-sys and mkl-corrode dependencies with local code in order to ensure
+# that we don't depend on external git repositories
+[patch."https://github.com/Andlon/mkl-sys.git"]
+mkl-sys = { path = "extern/mkl-sys" }
+
+[patch."https://github.com/Andlon/mkl-corrode.git"]
+mkl-corrode = { path = "extern/mkl-corrode" }

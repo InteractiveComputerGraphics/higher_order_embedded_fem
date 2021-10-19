@@ -1,0 +1,16 @@
+[package]
+name = "lp-bfp"
+version = "0.1.0"
+authors = ["Andreas Longva <longva@cs.rwth-aachen.de>"]
+edition = "2018"
+links = "ortools"
+publish = false
+
+[dependencies]
+libc = "0.2.66"
+
+[dev-dependencies]
+nalgebra = "0.21"
+
+[build-dependencies]
+cmake = "0.1"

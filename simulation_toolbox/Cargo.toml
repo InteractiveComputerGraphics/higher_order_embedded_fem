@@ -1,0 +1,35 @@
+[package]
+name = "simulation_toolbox"
+version = "0.1.0"
+authors = ["Andreas Longva"]
+edition = "2018"
+publish = false
+
+[dependencies]
+fenris = { path = "../fenris" }
+hamilton = { path = "../hamilton" }
+hamilton2 = { path = "../hamilton2" }
+serde = "1.0"
+itertools = "0.9"
+ply-rs = "0.1.2"
+obj = "0.10.0"
+osqp = "0.6.0"
+mshio = "0.4.2"
+mkl-corrode = { git = "https://github.com/Andlon/mkl-corrode.git", rev="0843a0b46234cd88d7a0e7489720514624207ad9", features = [ "openmp" ] }
+rstar = { version = "0.9.1", features = [ "serde" ] }
+coarse-prof = "0.2"
+log = "0.4"
+num = "0.2"
+serde_json = "1.0"
+typetag = "0.1"
+numeric_literals = "0.2"
+rayon = "1.3"
+paradis = { path = "../paradis" }
+global_stash = { path = "../global_stash" }
+nalgebra-lapack= { version="0.13", default-features=false, features = ["intel-mkl"] }
+lapack-src = {version="0.5", features = ["intel-mkl"]}
+# Make sure that
+intel-mkl-src = { version="0.5", features = ["use-shared"]}
+# This is a (temporary?) hack to force the openblas implementation used by nalgebra to use the system library
+# rather than the bundled one
+#openblas-src={version="0.8", features=["system"]}

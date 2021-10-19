@@ -1,0 +1,4 @@
+[build]
+# Make sure we always build for local CPU in order to maximize performance: there's rarely if ever a case where
+# we want to transfer the binary to a different computer (in which case this would have to be overridden)
+rustflags = ["-C", "target-cpu=native"]

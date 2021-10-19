@@ -1,0 +1,15 @@
+mod assembly;
+mod basis;
+mod conversion_formulas;
+mod cg;
+mod element;
+mod embedding;
+mod fe_mesh;
+mod geometry;
+mod materials;
+mod mesh;
+mod polygon;
+mod polymesh;
+mod polytope;
+mod reorder;
+mod sparse;

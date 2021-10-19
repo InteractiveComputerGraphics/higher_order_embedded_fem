@@ -1,0 +1,28 @@
+[package]
+name = "mkl-sys"
+version = "0.1.0"
+authors = ["Andreas Longva <andreas.b.longva@gmail.com>"]
+edition = "2018"
+links = "mkl"
+build = "build.rs"
+
+[features]
+# Intel MKL module selection
+all = []
+dss = []
+sparse-matrix-checker = []
+extended-eigensolver = []
+inspector-executor = []
+
+# Configurations
+openmp = []
+ilp64 = []
+
+[dependencies]
+
+[build-dependencies]
+bindgen = "0.54"
+
+# Need opt-level = 2 for `bindgen` to be able to finish in reasonable time (i.e. 30 secs instead of 10 minutes)
+[profile.dev.package.bindgen]
+opt-level = 2

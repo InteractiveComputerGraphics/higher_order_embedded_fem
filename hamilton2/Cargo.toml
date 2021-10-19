@@ -1,0 +1,15 @@
+[package]
+name = "hamilton2"
+version = "0.1.0"
+authors = ["Fabian Löschner <loeschner@cs.rwth-aachen.de>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+log = "0.4"
+itertools = "0.9"
+alga = "0.9"
+nalgebra = "0.21"
+numeric_literals = "0.2"
+approx = "0.3"
+coarse-prof = "0.2"

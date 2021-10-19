@@ -1,0 +1,19 @@
+[package]
+name = "intel-mkl-src"
+version = "0.5.0"
+authors = ["Andreas Longva <longva@cs.rwth-aachen.de>"]
+edition = "2018"
+publish = false
+
+# This is a dummy package that circumvents the intel-mkl-src package, which attempts to download MKL as part of the
+# build project. We replace it in-tree by this dummy package, which instead uses mkl-sys to link
+# to MKL.
+
+[features]
+use-shared = []
+
+[dependencies]
+# Note: This should match the same version as mkl-corrode is using
+[dependencies.mkl-sys]
+git = "https://github.com/Andlon/mkl-sys"
+rev = "e144301e42bf984e28b53026d366cfacbefa6d0f"

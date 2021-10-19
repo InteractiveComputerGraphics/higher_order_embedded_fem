@@ -1,0 +1,92 @@
+\documentclass{scrartcl}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{siunitx}
+
+\title{Higher-order finite elements for embedded simulation}
+\subtitle{Errata}
+\date{October 2021}
+\author{Andreas Longva, RWTH Aachen University}
+
+\begin{document}
+\maketitle
+
+This document details some errors discovered in our source code after the publication of our paper.
+
+The code used to produce most of the results for our paper is available at the following URL:
+
+\begin{center}
+\url{https://github.com/InteractiveComputerGraphics/higher_order_embedded_fem}
+\end{center}
+
+\section*{Material parameters}
+While rewriting and transfering some code to a new project, we discovered that our utility function for converting material parameters from Young's modulus and Poisson's ratio to corresponding Lamé parameters was off by a factor 4.
+
+In short, when converting to the Lamé parameters $\lambda$ and $\mu$, our code used an incorrect formula for computing $\lambda$, whereas the formula used for $\mu$ was correct. The formulas we had implemented were:
+\begin{align*}
+\mu = \frac{E}{2 (1 + \nu)}, \qquad
+\lambda^\text{bad} = \frac{1}{2} \cdot \frac{\mu \nu}{1 - 2 \nu}. \\
+\end{align*}
+The correct formula for $\lambda$ is
+\begin{align*}
+\lambda = 2 \cdot \frac{\mu \nu}{1 - 2 \nu} = 4 \lambda^\text{bad}.
+\end{align*}
+
+As a result, the parameters we give in the paper are not the \emph{true} parameters that were used for the simulation. With the incorrect formulas we can compute the Lamé parameters that were used for the simulation, and use the \emph{correct} conversion formulas the other way to compute corresponding \emph{effective} values for the Young's modulus and Poisson's ratio that would lead to the same Lamé parameters, and therefore the same simulation results. We obtain:
+\begin{align*}
+\nu^\text{eff} = \frac{\nu^\text{paper}}{4 - 6 \, \nu^\text{paper}},
+\qquad
+E^\text{eff} = E^\text{paper} \frac{1 + \nu^\text{eff}}{1 + \nu^\text{paper}}.
+\end{align*}
+
+The following table gives the original material parameters (as presented in the paper) and the corresponding effective values (up to 4 significant digits) for the experiments in which these material parameters were provided.
+
+\begin{center}
+\begin{tabular}{l | c | c}
+\textbf{Experiment} & \textbf{Paper parameters} & \textbf{Effective parameters} \\
+\hline
+Quadrature verification (Section 5.4)
+&
+\begin{tabular}{l}
+$E = \SI{3e6}{\pascal}$ \\ $\nu = 0.4$
+\end{tabular}
+& \begin{tabular}{l}
+$E = \SI{2.679e6}{\pascal}$ \\ $\nu = 0.25$
+\end{tabular}
+\\
+\hline
+Twisting cylinder (Section 6.2)
+&
+\begin{tabular}{l}
+$E = \SI{5e6}{\pascal}$ \\ $\nu = 0.48$
+\end{tabular}
+& \begin{tabular}{l}
+$E = \SI{4.826e6}{\pascal}$ \\ $\nu = 0.4286$
+\end{tabular}
+\\
+\hline
+Armadillo slingshot (Section 6.5)
+&
+\begin{tabular}{l}
+$E = \SI{5e5}{\pascal}$ \\ $\nu = 0.4$
+\end{tabular}
+& \begin{tabular}{l}
+$E = \SI{4.464e5}{\pascal}$ \\ $\nu = 0.25$
+\end{tabular}
+\\
+\hline
+\end{tabular}
+\end{center}
+
+We see that the resulting effective parameters are (unfortunately) noticably different from the intended parameters. However, these parameter choices were more or less arbitrary to begin with, so it seems fair to say that it does not significantly change any of the conclusions made in the paper.
+
+
+
+\section*{Twisting cylinder boundary conditions}
+
+The twisting cylinder (Section 6.2) is reported in the paper to be 16 meters long. Recently, upon reviewing the code, we realized that the Dirichlet boundary conditions at the end were enforced for nodes with $y$-coordinate $|y| \geq 6.99$ instead of $|y| \geq 7.99$. Therefore the motion of the last meter on each side of the cylinder is prescribed. The experiment therefore effectively simulates a 14 meter long cylinder as opposed to the 16 meters described.
+
+
+\section*{}
+\end{document}

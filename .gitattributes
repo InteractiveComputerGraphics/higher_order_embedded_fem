@@ -1,0 +1,5 @@
+assets/**/*.msh filter=lfs diff=lfs merge=lfs -text
+assets/**/*.vtk filter=lfs diff=lfs merge=lfs -text
+assets/**/*.svg filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text

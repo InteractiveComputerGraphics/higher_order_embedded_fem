@@ -1,0 +1,274 @@
+name: Build and run tests
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build_ubuntu_mkl2019:
+
+    name: Test on Ubuntu (MKL 2019.5)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install MKL
+      run: |
+        wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+        sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+        sudo sh -c 'echo deb https://apt.repos.intel.com/mkl all main > /etc/apt/sources.list.d/intel-mkl.list'
+        sudo apt update
+        sudo apt install intel-mkl-64bit-2020.0-088
+
+    - name: Update Rust
+      run: rustup update
+
+    - name: Build (--features "dss")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo build --features "dss" --verbose
+    - name: Run tests (--features "dss")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo test --features "dss" --verbose
+    - name: Build (--release --features "all")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo build --release --features "all" --verbose
+    - name: Run tests (--release --features "all")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo test --release --features "all" --verbose
+
+
+  build_ubuntu_mkl2020:
+
+    name: Test on Ubuntu (MKL 2020.1)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install MKL
+      run: |
+        wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+        sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+        sudo sh -c 'echo deb https://apt.repos.intel.com/mkl all main > /etc/apt/sources.list.d/intel-mkl.list'
+        sudo apt update
+        sudo apt install intel-mkl-64bit-2020.1-102
+
+    - name: Update Rust
+      run: rustup update
+
+    - name: Build (--features "dss")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo build --features "dss" --verbose
+    - name: Run tests (--features "dss")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo test --features "dss" --verbose
+    - name: Build (--release --features "all")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo build --release --features "all" --verbose
+    - name: Run tests (--release --features "all")
+      run: |
+        source /opt/intel/mkl/bin/mklvars.sh intel64
+        cargo test --release --features "all" --verbose
+
+
+  build_windows_mkl2019:
+
+    name: Test on Windows (MKL 2019.5)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Caching of MKL and clang does not work due to cache size limitations of Github
+
+      # - name: Cache MKL installation
+      #   id: cache-mkl-installation
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: mkl
+      #     key: ${{ runner.os }}-mkl-installed-w_mkl_2019.5.281
+      - name: Download MKL installer
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: (New-Object System.Net.WebClient).DownloadFile("http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15806/w_mkl_2019.5.281.exe", "$(($pwd).path)\w_mkl_2019.5.281.exe")
+        shell: pwsh
+      - name: Extract MKL installer files
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\w_mkl_2019.5.281.exe -ArgumentList @("--silent", "--extract-folder", "$(($pwd).path)\mkl-installer", "--extract-only") -Wait
+        shell: pwsh
+      - name: Install MKL
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\mkl-installer\install.exe -ArgumentList @("install", "--output=$(($pwd).path)\log.txt", "--eula=accept", "--installdir=$(($pwd).path)\mkl") -Wait
+        shell: pwsh
+      # - name: Show log
+      #   if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+      #   run: gc "$(($pwd).path)\log.txt"
+      #   shell: pwsh
+      # - name: Find "mklvars.bat"
+      #   run: ls -r -ea silentlycontinue -fo -inc "mklvars.bat" | % { $_.fullname }
+      #   shell: pwsh
+      # - name: Run mklvars.bat
+      #   run: .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+      #   shell: pwsh
+
+      # - name: Cache Clang installation
+      #   id: cache-clang-installation
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: clang
+      #     key: ${{ runner.os }}-clang-installed-LLVM-9.0.0-win64
+      - name: Download Clang
+        #if: steps.cache-clang-installation.outputs.cache-hit != 'true'
+        run: (New-Object System.Net.WebClient).DownloadFile("https://releases.llvm.org/9.0.0/LLVM-9.0.0-win64.exe", "$(($pwd).path)\LLVM-9.0.0-win64.exe")
+        shell: pwsh
+      - name: Install Clang
+        #if: steps.cache-clang-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\LLVM-9.0.0-win64.exe -ArgumentList @("/S", "/NCRC", "/D=$(($pwd).path)\clang") -Wait
+        shell: pwsh
+      # - name: Test Clang version
+      #   run: .\clang\bin\clang.exe --version
+      #   shell: pwsh
+      # - name: Find "clang.dll"
+      #   run: ls -r -ea silentlycontinue -fo -inc "libclang.dll" | % { $_.fullname }
+      #   shell: pwsh
+
+      # - name: Download rustup-init
+      #   run: (New-Object System.Net.WebClient).DownloadFile("https://win.rustup.rs/", "$(($pwd).path)\rustup-init.exe")
+      #   shell: pwsh
+      # - name: Install Rust
+      #   run: .\rustup-init.exe -y --quiet
+      #   shell: pwsh
+      # - name: Test Rust version
+      #   run: $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"; rustc.exe --version
+      #   shell: pwsh
+
+      - name: Update Rust
+        run: rustup update
+        shell: pwsh
+
+      # The following steps have to be run in CMD in order to get the environment variables from the .bat scripts
+
+      - name: Build (--features "dss")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo build --features "dss" --verbose
+        shell: cmd
+      - name: Run tests (--features "dss")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo test --features "dss" --verbose
+        shell: cmd
+
+      - name: Build (--release --features "all")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo build --release --features "all" --verbose
+        shell: cmd
+      - name: Run tests (--release --features "all")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo test --release --features "all" --verbose
+        shell: cmd
+
+
+  build_windows_mkl2020:
+
+    name: Test on Windows (MKL 2020.1)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Caching of MKL and clang does not work due to cache size limitations of Github
+
+      # - name: Cache MKL installation
+      #   id: cache-mkl-installation
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: mkl
+      #     key: ${{ runner.os }}-mkl-installed-w_mkl_2020.0.166
+      - name: Download MKL installer
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: (New-Object System.Net.WebClient).DownloadFile("http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16543/w_mkl_2020.1.216.exe", "$(($pwd).path)\w_mkl_2020.1.216.exe")
+        shell: pwsh
+      - name: Extract MKL installer files
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\w_mkl_2020.1.216.exe -ArgumentList @("--silent", "--extract-folder", "$(($pwd).path)\mkl-installer", "--extract-only") -Wait
+        shell: pwsh
+      - name: Install MKL
+        #if: steps.cache-mkl-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\mkl-installer\install.exe -ArgumentList @("install", "--output=$(($pwd).path)\log.txt", "--eula=accept", "--installdir=$(($pwd).path)\mkl") -Wait
+        shell: pwsh
+
+      # - name: Cache Clang installation
+      #   id: cache-clang-installation
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: clang
+      #     key: ${{ runner.os }}-clang-installed-LLVM-9.0.0-win64
+      - name: Download Clang
+        #if: steps.cache-clang-installation.outputs.cache-hit != 'true'
+        run: (New-Object System.Net.WebClient).DownloadFile("https://releases.llvm.org/9.0.0/LLVM-9.0.0-win64.exe", "$(($pwd).path)\LLVM-9.0.0-win64.exe")
+        shell: pwsh
+      - name: Install Clang
+        #if: steps.cache-clang-installation.outputs.cache-hit != 'true'
+        run: Start-Process .\LLVM-9.0.0-win64.exe -ArgumentList @("/S", "/NCRC", "/D=$(($pwd).path)\clang") -Wait
+        shell: pwsh
+
+      - name: Update Rust
+        run: rustup update
+        shell: pwsh
+
+      # The following steps have to be run in CMD in order to get the environment variables from the .bat scripts
+
+      - name: Build (--features "dss")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo build --features "dss" --verbose
+        shell: cmd
+      - name: Run tests (--features "dss")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo test --features "dss" --verbose
+        shell: cmd
+
+      - name: Build (--release --features "all")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo build --release --features "all" --verbose
+        shell: cmd
+      - name: Run tests (--release --features "all")
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call .\mkl\compilers_and_libraries\windows\mkl\bin\mklvars.bat intel64
+          set LIBCLANG_PATH=%cd%\clang\bin
+          cargo test --release --features "all" --verbose
+        shell: cmd
+

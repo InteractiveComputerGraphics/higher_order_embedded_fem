@@ -1,0 +1,21 @@
+[package]
+name = "mkl-corrode"
+version = "0.1.0"
+authors = ["Andreas Longva <andreas.b.longva@gmail.com>"]
+edition = "2018"
+
+[features]
+ilp64 = [ "mkl-sys/ilp64" ]
+openmp = [ "mkl-sys/openmp" ]
+
+[dependencies.mkl-sys]
+git = "https://github.com/Andlon/mkl-sys"
+rev = "c197c97319f0784caae26012968c9c7bd76d494b"
+features = [ "dss", "inspector-executor" ]
+
+[dev-dependencies]
+approx = "0.3"
+
+# Make sure that mkl-sys compiles faster by compiling bindgen in release mode
+[profile.dev.package.bindgen]
+opt-level = 2

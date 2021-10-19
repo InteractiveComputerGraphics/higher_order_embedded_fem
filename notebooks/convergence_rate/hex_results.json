@@ -1,0 +1,152 @@
+{
+  "methods": {
+    "fcm_hex20": [
+      {
+        "resolution": 1,
+        "mesh_size": 1.0,
+        "l2_error": 0.015568217362350112
+      },
+      {
+        "resolution": 2,
+        "mesh_size": 0.5,
+        "l2_error": 0.006600855273375664
+      },
+      {
+        "resolution": 4,
+        "mesh_size": 0.25,
+        "l2_error": 0.0008224766685536088
+      },
+      {
+        "resolution": 8,
+        "mesh_size": 0.125,
+        "l2_error": 0.00010777672812763918
+      },
+      {
+        "resolution": 16,
+        "mesh_size": 0.0625,
+        "l2_error": 0.000016211783973513926
+      },
+      {
+        "resolution": 24,
+        "mesh_size": 0.041666666666666664,
+        "l2_error": 5.385588663732758e-6
+      },
+      {
+        "resolution": 32,
+        "mesh_size": 0.03125,
+        "l2_error": 2.4413064065673753e-6
+      }
+    ],
+    "fcm_hex8": [
+      {
+        "resolution": 1,
+        "mesh_size": 1.0,
+        "l2_error": 0.027304043294701312
+      },
+      {
+        "resolution": 2,
+        "mesh_size": 0.5,
+        "l2_error": 0.015045633757349396
+      },
+      {
+        "resolution": 4,
+        "mesh_size": 0.25,
+        "l2_error": 0.00825306942680628
+      },
+      {
+        "resolution": 8,
+        "mesh_size": 0.125,
+        "l2_error": 0.0024339772404086937
+      },
+      {
+        "resolution": 16,
+        "mesh_size": 0.0625,
+        "l2_error": 0.0006553969625189122
+      },
+      {
+        "resolution": 24,
+        "mesh_size": 0.041666666666666664,
+        "l2_error": 0.0002991481072869819
+      },
+      {
+        "resolution": 32,
+        "mesh_size": 0.03125,
+        "l2_error": 0.0001701522535675172
+      }
+    ],
+    "fem_hex20": [
+      {
+        "resolution": 1,
+        "mesh_size": 1.0,
+        "l2_error": 0.028003418360481765
+      },
+      {
+        "resolution": 2,
+        "mesh_size": 0.5,
+        "l2_error": 0.012527029765963862
+      },
+      {
+        "resolution": 4,
+        "mesh_size": 0.25,
+        "l2_error": 0.007409369481656567
+      },
+      {
+        "resolution": 8,
+        "mesh_size": 0.125,
+        "l2_error": 0.004934755066080688
+      },
+      {
+        "resolution": 16,
+        "mesh_size": 0.0625,
+        "l2_error": 0.0032585811774176543
+      },
+      {
+        "resolution": 24,
+        "mesh_size": 0.041666666666666664,
+        "l2_error": 0.002568843221155484
+      },
+      {
+        "resolution": 32,
+        "mesh_size": 0.03125,
+        "l2_error": 0.0022498423793336476
+      }
+    ],
+    "fem_hex8": [
+      {
+        "resolution": 1,
+        "mesh_size": 1.0,
+        "l2_error": 0.038817442703279845
+      },
+      {
+        "resolution": 2,
+        "mesh_size": 0.5,
+        "l2_error": 0.021271582206626553
+      },
+      {
+        "resolution": 4,
+        "mesh_size": 0.25,
+        "l2_error": 0.013676506185528967
+      },
+      {
+        "resolution": 8,
+        "mesh_size": 0.125,
+        "l2_error": 0.00647020351067994
+      },
+      {
+        "resolution": 16,
+        "mesh_size": 0.0625,
+        "l2_error": 0.0035661597210581005
+      },
+      {
+        "resolution": 24,
+        "mesh_size": 0.041666666666666664,
+        "l2_error": 0.002606527931782387
+      },
+      {
+        "resolution": 32,
+        "mesh_size": 0.03125,
+        "l2_error": 0.0022402534392801606
+      }
+    ]
+  }
+}

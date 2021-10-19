@@ -1,0 +1,11 @@
+[package]
+name = "global_stash"
+version = "0.1.0"
+authors = ["Fabian Löschner <loeschner@cs.rwth-aachen.de>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+thiserror = "1.0"
