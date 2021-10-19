@@ -100,7 +100,7 @@ Recently, Intel rebranded its MKL library as
 [oneMKL](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html).
 We used Intel MKL 2020 for our experiments, but we believe it should also work with the more recent oneMKL versions.
 
-Install the library as described by the (one)MKL documentation. Our code look for the `MKLROOT`
+Install the library as described by the (one)MKL documentation. Our code looks for the `MKLROOT`
 environment variable. This environment variable gets automatically set if you run the
 configuration script provided alongside MKL. For example, on Linux:
 
