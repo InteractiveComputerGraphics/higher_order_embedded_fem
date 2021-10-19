@@ -9,6 +9,8 @@ ACM Transactions on Graphics (TOG), 39(6), pp.1-14.](https://dl.acm.org/doi/10.1
 Please also see the [entry on our website](https://animation.rwth-aachen.de/publication/0572/)
 for access to the paper, the supplemental document, video and more.
 
+![Teaser image from paper](teaser.png)
+
 ## Important information
 
 The code provided here is almost entirely unchanged from the code used to generate the results
