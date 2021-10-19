@@ -57,8 +57,10 @@ This will download and build the required Rust dependencies (of which there are 
 
 ## Running experiments
 
-In order to run the experiments, you will need to download the binary archive containing the asset files (meshes etc.)
-made available through GitHub releases. Unzip the archive into the root directory, which should give
+In order to run the experiments, you will need to download the binary archive `assets.zip` containing the asset files
+(meshes etc.) made available through
+[GitHub releases](https://github.com/InteractiveComputerGraphics/higher_order_embedded_fem/releases/tag/initial_release).
+Unzip the archive into the root directory, which should give
 you an `assets/` folder.
 
 The easiest way to run experiments is to run the provided Python wrapper files in the `experiments` folder.
